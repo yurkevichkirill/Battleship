@@ -1,3 +1,5 @@
 import "./styles.css";
 
-console.log("Hello");
+export function add2(a) {
+    return a + 2;
+}
