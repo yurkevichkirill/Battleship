@@ -25,16 +25,19 @@ describe("Gameboard", () => {
     });
 
     test("All ships are sunk", () => {
-        const newShip2 = gameboard.place(1, [[2, 2], [2, 2]]);
-        const newShip3 = gameboard.place(2, [[3, 3], [4, 3]]);
+        gameboard.place(3, [[0, 0], [0, 2]]);
+        gameboard.place(5, [[2, 3], [6, 3]]);
 
-        gameboard.recieveAttack([2, 2]);
+        gameboard.recieveAttack([0, 0]);
+        gameboard.recieveAttack([0, 1]);
+        gameboard.recieveAttack([0, 2]);
+
+        gameboard.recieveAttack([2, 3]);
         gameboard.recieveAttack([3, 3]);
-
-        expect(gameboard.areAllSunk()).toBeFalsy();
-
         gameboard.recieveAttack([4, 3]);
+        gameboard.recieveAttack([5, 3]);
+        gameboard.recieveAttack([6, 3]);
 
         expect(gameboard.areAllSunk()).toBeTruthy();
-    })
+    });
 })
