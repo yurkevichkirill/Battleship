@@ -1,6 +1,6 @@
 import { Computer } from "./computer";
 import { GameBoardDOM } from "./create-dom/gameboard-dom";
-import { fillAround, getUniqueCoord, isSubArrOf, isSuitableToShip } from "./find";
+import { fillAround, fillNearest, getNearestHit, getRandCrossMove, getRandLineMove, getUniqueCoord, isSubArrOf, isSuitableToShip } from "./find";
 import { Player } from "./player";
 
 export class Game {
@@ -93,6 +93,7 @@ export class Game {
     playWithComputer() {
         const player1Moves = [];
         const player2Moves = [];
+        const singleShipHits = [];
 
         const computerBoard = document.querySelector(`.${this.player2.name}-board`);
         const cells = computerBoard.querySelectorAll('.board-cell');
@@ -100,34 +101,82 @@ export class Game {
             cells[i].addEventListener('click', () => {
                 const newMoveX = cells[i].dataset.row;
                 const newMoveY = cells[i].dataset.col;
-                this.makeStep(newMoveX, newMoveY, player1Moves, player2Moves);
+                if(!this.isGameEnd()) {
+                    this.makeStep(newMoveX, newMoveY, player1Moves, player2Moves, singleShipHits);
+                }
             });
         }
     }
 
-    computerMove(computerMoves) {
+    computerMove(computerMoves, singleShipHits) {
         let coord;
-        do{
-            coord = getUniqueCoord(computerMoves);
-        } while(this.boardDOM1.getAttack(coord));
-        computerMoves.push(coord);
+        let isHit;
+        do{   
+            if(computerMoves.length === 0) {
+                coord = getUniqueCoord(computerMoves);
+            } else {
+                coord = this.getLogicCoord(computerMoves, singleShipHits) || getUniqueCoord(computerMoves);
+            }       
+            computerMoves.push(coord);
+            isHit = this.boardDOM1.getAttack(coord);
+            if(isHit) {
+                singleShipHits.push(coord);
+            }
+        } while(isHit);
     }
 
     isGameEnd() {
         if(this.player1.gameboard.areAllSunk() || this.player2.gameboard.areAllSunk()) {
             return true;
-        } 
+        }
         return false;
     }
 
-    makeStep(player1X, player1Y, player1Moves, player2Moves) {
+    makeStep(player1X, player1Y, player1Moves, player2Moves, singleShipHits) {
         if(!isSubArrOf([player1X, player1Y], player1Moves) && !this.boardDOM2.getAttack([player1X, player1Y])) {
             player1Moves.push([player1X, player1Y]);
-            this.computerMove(player2Moves);
+            this.computerMove(player2Moves, singleShipHits);
         }
         if(this.isGameEnd()) {
             console.log("Game end");
             return;
         }
+    }
+
+    getLogicCoord(moves, hits) {
+        if(hits.length === 0) return;
+        const lastCoord = hits.at(-1);
+        const curShip = this.player1.gameboard.getShipByCoord(lastCoord);
+        if(curShip.isSunk()) {
+            this.roundSunk(curShip, moves);
+            hits.splice(0, hits.length);
+            return;
+        }
+        if(hits.length > 1) {
+            const last2Coord = hits.at(-2);
+            let newCoord;
+            if(lastCoord[0] === last2Coord[0]) {
+                do {
+                    newCoord = getNearestHit(hits, 'x');
+                } while(isSubArrOf(newCoord, moves));
+            } else if(lastCoord[1] == last2Coord[1]) {
+                do {
+                    newCoord = getNearestHit(hits, 'y');
+                } while(isSubArrOf(newCoord, moves));
+            }
+            return newCoord;
+        } else {
+            let newCoord;
+            do {
+                newCoord = getRandCrossMove(lastCoord);
+            } while(isSubArrOf(newCoord, moves));
+            return newCoord;
+        }
+        
+    }
+
+    roundSunk(ship, moves) {
+        fillNearest(ship.coordinates[0], moves);
+        fillNearest(ship.coordinates[1], moves);
     }
 }

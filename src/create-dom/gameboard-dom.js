@@ -84,7 +84,11 @@ export class GameBoardDOM {
         }
     }
 
-    getCurCoordinates() {
-
+    isSunked() {
+        this.gameboard.ships.forEach((ship) => {
+            if(ship.isSunked()) {
+                
+            }
+        })
     }
 }

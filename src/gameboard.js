@@ -46,4 +46,19 @@ export class Gameboard {
         }
         return true;
     }
+
+    getShipByCoord(coord) {
+        for(let i = 0; i < this.ships.length; i++) {
+            if(this.ships[i].coordinates[0][0] == coord[0]) {
+                if(coord[1] >= this.ships[i].coordinates[0][1] && coord[1] <= this.ships[i].coordinates[1][1]) {
+                    return this.ships[i];
+                }
+            }
+            if(this.ships[i].coordinates[0][1] == coord[1]) {
+                if(coord[0] >= this.ships[i].coordinates[0][0] && coord[0] <= this.ships[i].coordinates[1][0]) {
+                    return this.ships[i];
+                }
+            }            
+        }
+    }
 }
