@@ -178,8 +178,8 @@ export class PlayingDOM {
         signalMessage.textContent = "Place Your ships";
         document.querySelector('.mode-choice-box').insertAdjacentElement('afterend', signalMessage);
 
-        const player1Name = ArrHelp.removeSpaces(prompt("Enter first player's name:", "Some Player1") || 'undefined_player1');
-        const player2Name = ArrHelp.removeSpaces(prompt("Enter second player's name:", "Some Player2") || 'undefined_player2');
+        const player1Name = ArrHelp.removeSpaces(prompt("Enter first player's name:", "Some Player1") || 'UndefinedPlayer1');
+        const player2Name = ArrHelp.removeSpaces(prompt("Enter second player's name:", "Some Player2") || 'UndefinedPlayer2');
 
         const player1 = new Player(player1Name);
         const player2 = new Player(player2Name);
@@ -227,6 +227,7 @@ export class PlayingDOM {
         const randomBtn1 = document.createElement("button");
         randomBtn1.addEventListener('click', () => {
             if(game.isGameStart) return;
+            if(this.isGameBoardLock(gameBoardDOMPlayer1)) return;
             game.randomPlace(gameBoardDOMPlayer1);
             gameBoardDOMPlayer1.placeShips();
         });
@@ -244,6 +245,7 @@ export class PlayingDOM {
         const randomBtn2 = document.createElement("button");
         randomBtn2.addEventListener('click', () => {
             if(game.isGameStart) return;
+            if(this.isGameBoardLock(gameBoardDOMPlayer2)) return;
             game.randomPlace(gameBoardDOMPlayer2);
             gameBoardDOMPlayer2.placeShips();
         });
@@ -321,7 +323,13 @@ export class PlayingDOM {
     }
 
     lockGameBoard(gameBoardDOM) {
-        gameBoardDOM.isLocked = true;
+        if(!gameBoardDOM.isLocked) {
+            gameBoardDOM.isLocked = true;
+        }
+    }
+
+    isGameBoardLock(gameBoardDOM) {
+        return gameBoardDOM.isLocked;
     }
 
     cleanLastGame() {
