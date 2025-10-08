@@ -65,7 +65,7 @@ export class PlayingDOM {
         signalMessage.textContent = "Place Your ships";
         document.querySelector('.mode-choice-box').insertAdjacentElement('afterend', signalMessage);
 
-        const playerName = ArrHelp.removeSpaces(prompt("Enter your name:", "Some Player") || 'undefined_player');
+        const playerName = ArrHelp.removeSpaces(prompt("Enter your name:", "Some Player") || 'UndefinedPlayer');
         const computerName = "Computer";
 
         const player = new Player(playerName);
