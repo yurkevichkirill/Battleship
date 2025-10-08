@@ -1,19 +1,19 @@
 export class GameBoardDOM {
-    constructor(gameboard, name) {
-        this.gameboard = gameboard;
+    constructor(player) {
+        this.player = player;
+        this.isLocked = false;
 
         this.gbDOM = document.createElement('div');
-        this.gbDOM.className = `board ${name}-board`;
+        this.gbDOM.className = `board ${this.player.name}-board`;
 
         this.initializeBoard();
-        //this.placeShips(gameboard.ships);
     }
 
     initializeBoard() {
-        for(let i = 0; i < this.gameboard.size; i++) {
+        for(let i = 0; i < this.player.gameboard.size; i++) {
             const boardRow = document.createElement('div');
             boardRow.className = 'board-row';
-            for(let j = 0; j < this.gameboard.size; j++) {
+            for(let j = 0; j < this.player.gameboard.size; j++) {
                 const boardCell = document.createElement('div');
                 boardCell.dataset.row = i;
                 boardCell.dataset.col = j;
@@ -26,7 +26,7 @@ export class GameBoardDOM {
 
     placeShips() {
         this.cleanBoard();
-        this.gameboard.ships.forEach((ship) => {
+        this.player.gameboard.ships.forEach((ship) => {
             const [x1, y1] = ship.coordinates[0];
             const [x2, y2] = ship.coordinates[1];
             if(x1 === x2) {
@@ -41,7 +41,7 @@ export class GameBoardDOM {
         })
     }
 
-    markField(coordinate, className) {
+    markField(coordinate, className, mark = true) {
         const [x, y] = coordinate;
         const rows = this.gbDOM.children;
 
@@ -49,7 +49,14 @@ export class GameBoardDOM {
             const cells = rows[i].children;
             for(let j = 0; j < cells.length; j++) {
                 if(cells[j].dataset.row == x && cells[j].dataset.col == y) {
-                    cells[j].classList.add(className);
+                    if(cells[j].classList.contains('blank-cell')) {
+                        cells[j].classList.remove('blank-cell');
+                    }
+                    if(mark) {
+                        cells[j].classList.add(className);
+                    } else {
+                        cells[j].classList.remove(className);
+                    }
                     return;
                 }
             }
@@ -66,8 +73,8 @@ export class GameBoardDOM {
         }
     }
 
-    showMissed() {
-        this.markField(this.gameboard.missedAttacks.at(-1), 'missed-attack');
+    showMissed(coordinate) {
+        this.markField(coordinate, 'missed-attack');
     }
 
     showHit(coordinate){
@@ -75,20 +82,16 @@ export class GameBoardDOM {
     }
 
     getAttack(coordinate) {
-        if(this.gameboard.recieveAttack(coordinate)) {
+        if(this.player.gameboard.recieveAttack(coordinate)) {
             this.showHit(coordinate);
             return true;
         } else {
-            this.showMissed();
+            this.showMissed(coordinate);
             return false
         }
     }
 
-    isSunked() {
-        this.gameboard.ships.forEach((ship) => {
-            if(ship.isSunked()) {
-                
-            }
-        })
+    changeActive(){
+        this.gbDOM.classList.toggle('inactive-board');
     }
 }

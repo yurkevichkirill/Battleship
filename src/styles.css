@@ -1,11 +1,127 @@
-.game-boards{
+@font-face {
+  font-family: "WhiteArmy";
+  src:
+    url("fonts/WhiteArmy.woff2") format("woff2"),
+    url("fonts/WhiteArmy.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body{
     display: flex;
-    gap: 30%;
+    justify-content: center;
+    background-color: rgb(223, 235, 255);
+}
+
+p{
+    font-size: 2rem;
+    margin: 0;
+    font-family: "WhiteArmy";
+}
+
+button{
+    font-family: "WhiteArmy";
+    background-color: rgb(219, 219, 219);
+}
+
+button:hover{
+    background-color: rgb(51, 51, 51);
+    color: white;
+}
+
+.game-container{
+    min-width: 510px;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+.title{
+    text-align: center;
+    font-family: "WhiteArmy";
+    font-size: 3rem;
+}
+
+.signal-message{
+    border: 2px solid black;
+    background-color: rgba(255, 166, 0, 0.678);
+    border-radius: 10px;
+    padding-left: 10px;
+}
+
+.mode-choice-box{
+    display: flex;
+    gap: 1%;
+}
+
+.mode-choice-box > button{
+    flex: 1;
+    font-size: 1.5rem;
+}
+
+.game-box{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 5vw;
+}
+
+.field{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.place-btns{
+    display: flex;
+    gap: 1%;
+}
+
+.place-btns > button{
+    flex: 1;
+    font-size: 1.5rem;
+}
+
+.info-box{
+    display: flex;
+    flex-direction: column;
+}
+
+.game-btns{
+    display: flex;
+    gap: 1%;
+}
+
+.game-btns > button {
+    flex: 1;
+    font-size: 1.5em;
+}
+
+.play-btn{
+    background-color: rgba(41, 180, 28, 0.719);
+}
+
+.play-btn:hover{
+    background-color: rgba(21, 255, 0, 0.719)
+}
+
+.reset-btn{
+    background-color: rgb(235, 56, 56);
+}
+
+.reset-btn:hover{
+    background-color: rgb(255, 0, 0);
 }
 
 .board{
     display: flex;
     flex-direction: column;
+    background-color: white;
+    box-shadow: 1px 1px 5px rgb(185, 185, 185);
+}
+
+.inactive-board{
+    opacity: 0.3;
 }
 
 .board-row{
@@ -21,11 +137,31 @@
 }
 
 .hit{
-    background-color: red;
+    background-color: rgb(235, 56, 56);
 }
 
 .board-cell{
-    width: 30px;
-    height: 30px;
+    width: clamp(33px, 3vw, 40px);
+    height: clamp(33px, 3vw, 40px);
     border: 1px solid black;
+}
+
+.good-place{
+    background-color: rgb(159, 255, 159);
+}
+
+.blank-cell{
+    background-color: white;
+}
+
+@media (width <= 1000px) {
+    .game-container{
+        min-width: 250px;
+    }
+    .game-box{
+        flex-direction: column;
+    }
+    .title{
+        margin: 0;
+    }
 }

@@ -1,3 +1,4 @@
+import { feelGrid } from "./arr-help";
 import { Ship } from "./ship";
 
 export class Gameboard {
@@ -5,6 +6,9 @@ export class Gameboard {
         this.size = size;
         this.ships = [];
         this.missedAttacks = [];
+        this.places =  Array(this.size).fill().map(() => {
+            return Array(this.size).fill(0);
+        });
     }
 
     place(length, coordinates) {
@@ -60,5 +64,16 @@ export class Gameboard {
                 }
             }            
         }
+    }
+
+    removeShips() {
+        this.ships = [];
+        feelGrid(this.places, 0);
+    }
+
+    reset(){
+        this.ships = [];
+        this.missedAttacks = [];
+        feelGrid(this.places, 0);
     }
 }
