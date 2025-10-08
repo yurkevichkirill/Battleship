@@ -1,1 +1,1 @@
-default template to make webpack bundle (The Odin Project)
+In this project I've learned about TDD and how it actualy works. It was very interesting and took a very long time, but I thing it is good approach. Also I've remembered some details about classes. For now it is my favourite project, I hope next ones will be even better
